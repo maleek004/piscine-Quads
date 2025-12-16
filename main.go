@@ -1,8 +1,12 @@
 package main
 
 import (
+	"bufio"
 	"fmt"
+	"io"
 	"os"
+	"sort"
+	"strings"
 	Quad "sudoku/quad"
 )
 
@@ -97,6 +101,103 @@ func PrintSudoku(grid [9][9]int) {
 	}
 }
 
+func printrow(startChar, midChar, endChar string, countMid int) string {
+	if countMid < 0 {
+		return startChar + "\n"
+	}
+	return startChar + strings.Repeat(midChar, countMid) + endChar + "\n"
+}
+
+func QuadA(x, y int) string {
+	if x <= 0 || y <= 0 {
+		return ""
+	}
+
+	countMid := x - 2
+	var b strings.Builder
+
+	b.WriteString(printrow("o", "-", "o", countMid))
+	for i := 0; i < y-2; i++ {
+		b.WriteString(printrow("|", " ", "|", countMid))
+	}
+	if y > 1 {
+		b.WriteString(printrow("o", "-", "o", countMid))
+	}
+	return b.String()
+}
+
+func QuadB(x, y int) string {
+	if x <= 0 || y <= 0 {
+		return ""
+	}
+
+	countMid := x - 2
+	var b strings.Builder
+
+	b.WriteString(printrow("/", "*", "\\", countMid))
+	for i := 0; i < y-2; i++ {
+		b.WriteString(printrow("*", " ", "*", countMid))
+	}
+	if y > 1 {
+		b.WriteString(printrow("\\", "*", "/", countMid))
+	}
+	return b.String()
+}
+
+func QuadC(x, y int) string {
+	if x <= 0 || y <= 0 {
+		return ""
+	}
+
+	countMid := x - 2
+	var b strings.Builder
+
+	b.WriteString(printrow("A", "B", "A", countMid))
+	for i := 0; i < y-2; i++ {
+		b.WriteString(printrow("B", " ", "B", countMid))
+	}
+	if y > 1 {
+		b.WriteString(printrow("C", "B", "C", countMid))
+	}
+	return b.String()
+}
+
+func QuadD(x, y int) string {
+	if x <= 0 || y <= 0 {
+		return ""
+	}
+
+	countMid := x - 2
+	var b strings.Builder
+
+	b.WriteString(printrow("A", "B", "C", countMid))
+	for i := 0; i < y-2; i++ {
+		b.WriteString(printrow("B", " ", "B", countMid))
+	}
+	if y > 1 {
+		b.WriteString(printrow("A", "B", "C", countMid))
+	}
+	return b.String()
+}
+
+func QuadE(x, y int) string {
+	if x <= 0 || y <= 0 {
+		return ""
+	}
+
+	countMid := x - 2
+	var b strings.Builder
+
+	b.WriteString(printrow("A", "B", "C", countMid))
+	for i := 0; i < y-2; i++ {
+		b.WriteString(printrow("B", " ", "B", countMid))
+	}
+	if y > 1 {
+		b.WriteString(printrow("C", "B", "A", countMid))
+	}
+	return b.String()
+}
+
 // OUR MAIN PROGRAM
 
 func main() {
@@ -150,4 +251,51 @@ func main() {
 	} else {
 		fmt.Println("Error")
 	}
+	// read stdin
+	reader := bufio.NewReader(os.Stdin)
+	input, _ := io.ReadAll(reader)
+	content := string(input)
+
+	if strings.TrimSpace(content) == "" {
+		fmt.Println("Not a quad function")
+		return
+	}
+
+	// remove ONLY one trailing newline
+	clean := strings.TrimRight(content, "\n")
+
+	lines := strings.Split(clean, "\n")
+	y := len(lines)
+	x := len(lines[0])
+
+	// Expected regenerated quads
+	target := clean + "\n"
+
+	matches := []string{}
+
+	if QuadA(x, y) == target {
+		matches = append(matches, fmt.Sprintf("[quadA] [%d] [%d]", x, y))
+	}
+	if QuadB(x, y) == target {
+		matches = append(matches, fmt.Sprintf("[quadB] [%d] [%d]", x, y))
+	}
+	if QuadC(x, y) == target {
+		matches = append(matches, fmt.Sprintf("[quadC] [%d] [%d]", x, y))
+	}
+	if QuadD(x, y) == target {
+		matches = append(matches, fmt.Sprintf("[quadD] [%d] [%d]", x, y))
+	}
+	if QuadE(x, y) == target {
+		matches = append(matches, fmt.Sprintf("[quadE] [%d] [%d]", x, y))
+	}
+
+	if len(matches) == 0 {
+		fmt.Println("Not a quad function")
+		return
+	}
+
+	// alphabetical order
+	sort.Strings(matches)
+
+	fmt.Println(strings.Join(matches, " || "))
 }
