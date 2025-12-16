@@ -23,7 +23,7 @@ func isValid(grid *[9][9]int, row, col, num int) bool {
 		}
 	}
 
-	// Determine which 3×3 box we are in
+	// Determine which 3×3 box we are in..
 	boxRow := (row / 3) * 3
 	boxCol := (col / 3) * 3
 
