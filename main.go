@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"os"
+	Quad "sudoku/quad"
 )
 
 // ============================================
@@ -99,6 +100,17 @@ func PrintSudoku(grid [9][9]int) {
 // OUR MAIN PROGRAM
 
 func main() {
+
+	Quad.QuadA(5, 3)
+	fmt.Println()
+	Quad.QuadB(5, 3)
+	fmt.Println()
+	Quad.QuadC(5, 3)
+	fmt.Println()
+	Quad.QuadD(5, 3)
+	fmt.Println()
+	Quad.QuadE(5, 3)
+	fmt.Println()
 
 	// Expect exactly 9 rows as input
 	if len(os.Args) != 10 {
